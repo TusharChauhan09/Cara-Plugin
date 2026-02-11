@@ -1,135 +1,166 @@
-# Turborepo starter
+# 🚀 CodePulse - Developer Typing Analytics Platform
 
-This Turborepo starter is maintained by the Turborepo core team.
+A comprehensive developer productivity tool that tracks typing speed, coding patterns, and provides analytics through a VS Code extension and web dashboard.
 
-## Using this example
+## 📋 Project Overview
 
-Run the following command:
+CodePulse helps developers:
 
-```sh
-npx create-turbo@latest
+- Track real-time typing speed (WPM) in the VS Code status bar
+- Run typing tests with code samples
+- View detailed analytics and coding patterns
+- Compare rankings on global leaderboards
+- Sync data across devices
+
+## 🛠️ Tech Stack
+
+| Component           | Technology               |
+| ------------------- | ------------------------ |
+| **Build System**    | Turborepo                |
+| **Package Manager** | Bun                      |
+| **Frontend**        | Next.js 14+ (App Router) |
+| **Database**        | PostgreSQL + Prisma 7    |
+| **Authentication**  | NextAuth.js v5 (Auth.js) |
+| **Charts**          | Apache ECharts           |
+| **Extension**       | VS Code Extension API    |
+
+## 📁 Project Structure
+
+```
+codepulse/
+├── apps/
+│   ├── web/                    # Next.js Web Application
+│   ├── extension/              # VS Code Extension
+│   └── docs/                   # Documentation
+│
+├── packages/
+│   ├── database/               # Prisma schema & client
+│   ├── typescript-config/      # Shared TypeScript configs
+│   ├── eslint-config/          # Shared ESLint configs
+│   └── ui/                     # Shared UI components
+│
+├── workflows/
+│   └── PROJECT_GUIDE.md        # Detailed implementation guide
+│
+├── turbo.json                  # Turborepo config
+└── package.json                # Root package.json
 ```
 
-## What's inside?
+## 🚀 Getting Started
 
-This Turborepo includes the following packages/apps:
+### Prerequisites
 
-### Apps and Packages
+- [Bun](https://bun.sh/) (v1.1+)
+- [Docker](https://www.docker.com/) (for PostgreSQL)
+- [VS Code](https://code.visualstudio.com/) or [Cursor](https://cursor.sh/)
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Installation
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+```bash
+# Clone the repository
+git clone <repository-url>
+cd codepulse
 
-### Utilities
+# Install dependencies
+bun install
 
-This Turborepo has some additional tools already setup for you:
+# Start PostgreSQL (Docker)
+docker run --name codepulse-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=codepulse -p 5432:5432 -d postgres:16-alpine
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+# Setup database
+cd packages/database
+cp .env.example .env
+# Update DATABASE_URL in .env
+bun run db:push
+bun run db:generate
+```
+
+### Development
+
+```bash
+# Start all apps in development mode
+bun run dev
+
+# Start specific app
+bunx turbo dev --filter=web
+bunx turbo dev --filter=extension
+```
 
 ### Build
 
-To build all apps and packages, run the following command:
+```bash
+# Build all apps
+bun run build
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+# Build specific app
+bunx turbo build --filter=web
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+## 📦 Apps & Packages
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+### Apps
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+| App         | Description           | Port |
+| ----------- | --------------------- | ---- |
+| `web`       | Next.js web dashboard | 3000 |
+| `extension` | VS Code extension     | -    |
+| `docs`      | Documentation site    | 3001 |
 
-### Develop
+### Packages
 
-To develop all apps and packages, run the following command:
+| Package                   | Description               |
+| ------------------------- | ------------------------- |
+| `@cara/database`          | Prisma client & schema    |
+| `@repo/typescript-config` | Shared TypeScript configs |
+| `@repo/eslint-config`     | Shared ESLint configs     |
+| `@repo/ui`                | Shared UI components      |
 
-```
-cd my-turborepo
+## 🗄️ Database
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+The project uses PostgreSQL with Prisma ORM (v7).
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+```bash
+# Generate Prisma client
+cd packages/database
+bun run db:generate
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+# Push schema to database
+bun run db:push
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+# Run migrations
+bun run db:migrate
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+# Open Prisma Studio
+bun run db:studio
 ```
 
-### Remote Caching
+## 🔌 VS Code Extension
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+The extension tracks typing speed and provides:
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+- Real-time WPM display in status bar
+- Typing tests with code samples
+- Statistics view
+- Cloud sync
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+### Extension Commands
 
-```
-cd my-turborepo
+- `CodePulse: Start Typing Test` - Start a typing test
+- `CodePulse: Show Statistics` - View your typing stats
+- `CodePulse: Sync to Cloud` - Manually sync data
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
+### Development
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+cd apps/extension
+bun run compile
+# Press F5 in VS Code to launch Extension Development Host
 ```
 
-## Useful Links
+## 📚 Documentation
 
-Learn more about the power of Turborepo:
+For detailed implementation guide, see [workflows/PROJECT_GUIDE.md](./workflows/PROJECT_GUIDE.md)
 
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+## 📝 License
+
+MIT
