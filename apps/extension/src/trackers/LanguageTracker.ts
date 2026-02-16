@@ -6,7 +6,7 @@ export interface LanguageStat {
   lastActiveAt: number;
 }
 
-const STORAGE_KEY = "codepulse.languageStats";
+const STORAGE_KEY = "cara.languageStats";
 const FLUSH_INTERVAL_MS = 10_000; // persist every 10s
 
 /**
@@ -100,7 +100,7 @@ export class LanguageTracker implements vscode.Disposable {
   getRanking(): LanguageStat[] {
     this.flushCurrentSession();
     return Array.from(this.inMemory.values()).sort(
-      (a, b) => b.totalSeconds - a.totalSeconds
+      (a, b) => b.totalSeconds - a.totalSeconds,
     );
   }
 

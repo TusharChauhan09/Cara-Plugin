@@ -1,8 +1,8 @@
 import type { Disposable } from "vscode";
-import type { SpeedTrackerDelegate } from "./types";
+import type { SpeedTrackerDelegate } from "./types.js";
 
 const ROLLING_WINDOW_MS = 60_000; // 1 minute
-const UPDATE_INTERVAL_MS = 1500;  // update status bar every 1.5s
+const UPDATE_INTERVAL_MS = 1500; // update status bar every 1.5s
 
 interface KeystrokeRecord {
   time: number;

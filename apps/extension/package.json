@@ -1,9 +1,9 @@
 {
-  "name": "codepulse",
-  "displayName": "CodePulse - Typing Analytics",
+  "name": "cara",
+  "displayName": "Cara - Typing Analytics",
   "description": "Developer typing analytics and speed tracking for VS Code",
   "version": "0.0.1",
-  "publisher": "codepulse",
+  "publisher": "cara",
   "engines": {
     "vscode": "^1.109.0"
   },
@@ -17,40 +17,40 @@
   "contributes": {
     "commands": [
       {
-        "command": "codepulse.startTypingTest",
-        "title": "CodePulse: Start Typing Test"
+        "command": "cara.startTypingTest",
+        "title": "Cara: Start Typing Test"
       },
       {
-        "command": "codepulse.resetTypingTest",
-        "title": "CodePulse: Reset Typing Test"
+        "command": "cara.resetTypingTest",
+        "title": "Cara: Reset Typing Test"
       },
       {
-        "command": "codepulse.showStats",
-        "title": "CodePulse: Show Statistics"
+        "command": "cara.showStats",
+        "title": "Cara: Show Statistics"
       },
       {
-        "command": "codepulse.showStatusBar",
-        "title": "CodePulse: Show Status Bar"
+        "command": "cara.showStatusBar",
+        "title": "Cara: Show Status Bar"
       },
       {
-        "command": "codepulse.syncNow",
-        "title": "CodePulse: Sync to Cloud"
+        "command": "cara.syncNow",
+        "title": "Cara: Sync to Cloud"
       }
     ],
     "configuration": {
-      "title": "CodePulse",
+      "title": "Cara",
       "properties": {
-        "codepulse.showSpeedInStatusBar": {
+        "cara.showSpeedInStatusBar": {
           "type": "boolean",
           "default": true,
           "description": "Show typing speed in the status bar"
         },
-        "codepulse.autoSync": {
+        "cara.autoSync": {
           "type": "boolean",
           "default": true,
           "description": "Automatically sync data to cloud"
         },
-        "codepulse.syncIntervalMinutes": {
+        "cara.syncIntervalMinutes": {
           "type": "number",
           "default": 30,
           "description": "Interval between automatic syncs (in minutes)"
