@@ -1,37 +1,33 @@
-# 🚀 CodePulse - Developer Typing Analytics Platform
+# Cara - Developer Typing Analytics
 
-A comprehensive developer productivity tool that tracks typing speed, coding patterns, and provides analytics through a VS Code extension and web dashboard.
+A developer productivity tool that tracks typing speed, coding patterns, and provides analytics through a VS Code extension and web dashboard.
 
-## 📋 Project Overview
+## Project Overview
 
-CodePulse helps developers:
+Cara helps developers:
 
 - Track real-time typing speed (WPM) in the VS Code status bar
 - Run typing tests with code samples
 - View detailed analytics and coding patterns
 - Compare rankings on global leaderboards
-- Sync data across devices
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Component           | Technology               |
 | ------------------- | ------------------------ |
 | **Build System**    | Turborepo                |
 | **Package Manager** | Bun                      |
-| **Frontend**        | Next.js 14+ (App Router) |
+| **Frontend**        | Next.js (App Router)     |
 | **Database**        | PostgreSQL + Prisma 7    |
-| **Authentication**  | NextAuth.js v5 (Auth.js) |
-| **Charts**          | Apache ECharts           |
 | **Extension**       | VS Code Extension API    |
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-codepulse/
+cara-plugin/
 ├── apps/
-│   ├── web/                    # Next.js Web Application
-│   ├── extension/              # VS Code Extension
-│   └── docs/                   # Documentation
+│   ├── web/                    # Next.js Web Dashboard
+│   └── extension/              # VS Code Extension
 │
 ├── packages/
 │   ├── database/               # Prisma schema & client
@@ -39,33 +35,30 @@ codepulse/
 │   ├── eslint-config/          # Shared ESLint configs
 │   └── ui/                     # Shared UI components
 │
-├── workflows/
-│   └── PROJECT_GUIDE.md        # Detailed implementation guide
-│
 ├── turbo.json                  # Turborepo config
 └── package.json                # Root package.json
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
 - [Bun](https://bun.sh/) (v1.1+)
 - [Docker](https://www.docker.com/) (for PostgreSQL)
-- [VS Code](https://code.visualstudio.com/) or [Cursor](https://cursor.sh/)
+- [VS Code](https://code.visualstudio.com/)
 
 ### Installation
 
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd codepulse
+cd cara-plugin
 
 # Install dependencies
 bun install
 
 # Start PostgreSQL (Docker)
-docker run --name codepulse-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=codepulse -p 5432:5432 -d postgres:16-alpine
+docker run --name cara-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=cara -p 5432:5432 -d postgres:16-alpine
 
 # Setup database
 cd packages/database
@@ -96,7 +89,7 @@ bun run build
 bunx turbo build --filter=web
 ```
 
-## 📦 Apps & Packages
+## Apps & Packages
 
 ### Apps
 
@@ -104,7 +97,6 @@ bunx turbo build --filter=web
 | ----------- | --------------------- | ---- |
 | `web`       | Next.js web dashboard | 3000 |
 | `extension` | VS Code extension     | -    |
-| `docs`      | Documentation site    | 3001 |
 
 ### Packages
 
@@ -115,39 +107,32 @@ bunx turbo build --filter=web
 | `@repo/eslint-config`     | Shared ESLint configs     |
 | `@repo/ui`                | Shared UI components      |
 
-## 🗄️ Database
+## Database
 
 The project uses PostgreSQL with Prisma ORM (v7).
 
 ```bash
-# Generate Prisma client
 cd packages/database
-bun run db:generate
-
-# Push schema to database
-bun run db:push
-
-# Run migrations
-bun run db:migrate
-
-# Open Prisma Studio
-bun run db:studio
+bun run db:generate   # Generate Prisma client
+bun run db:push       # Push schema to database
+bun run db:migrate    # Run migrations
+bun run db:studio     # Open Prisma Studio
 ```
 
-## 🔌 VS Code Extension
+## VS Code Extension
 
 The extension tracks typing speed and provides:
 
 - Real-time WPM display in status bar
 - Typing tests with code samples
 - Statistics view
-- Cloud sync
 
 ### Extension Commands
 
-- `CodePulse: Start Typing Test` - Start a typing test
-- `CodePulse: Show Statistics` - View your typing stats
-- `CodePulse: Sync to Cloud` - Manually sync data
+- `Cara: Start Typing Test` - Start a typing test
+- `Cara: Reset Typing Test` - Reset current typing test
+- `Cara: Show Statistics` - View your typing stats
+- `Cara: Show Status Bar` - Restore the status bar item
 
 ### Development
 
@@ -157,10 +142,6 @@ bun run compile
 # Press F5 in VS Code to launch Extension Development Host
 ```
 
-## 📚 Documentation
-
-For detailed implementation guide, see [workflows/PROJECT_GUIDE.md](./workflows/PROJECT_GUIDE.md)
-
-## 📝 License
+## License
 
 MIT

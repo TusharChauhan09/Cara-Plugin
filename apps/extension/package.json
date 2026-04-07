@@ -31,10 +31,6 @@
       {
         "command": "cara.showStatusBar",
         "title": "Cara: Show Status Bar"
-      },
-      {
-        "command": "cara.syncNow",
-        "title": "Cara: Sync to Cloud"
       }
     ],
     "configuration": {
@@ -44,16 +40,6 @@
           "type": "boolean",
           "default": true,
           "description": "Show typing speed in the status bar"
-        },
-        "cara.autoSync": {
-          "type": "boolean",
-          "default": true,
-          "description": "Automatically sync data to cloud"
-        },
-        "cara.syncIntervalMinutes": {
-          "type": "number",
-          "default": 30,
-          "description": "Interval between automatic syncs (in minutes)"
         }
       }
     }
