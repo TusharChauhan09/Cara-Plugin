@@ -82,9 +82,6 @@ export function activate(context: vscode.ExtensionContext) {
         const wpm = speedTracker.getWpm();
         showStatsPanel(ranking, wpm, context.extensionUri);
       }),
-      vscode.commands.registerCommand("cara.syncNow", () => {
-        vscode.window.showInformationMessage("Cara: Cloud sync coming later.");
-      }),
       vscode.commands.registerCommand("cara.showStatusBar", () => {
         const wpm = speedTracker.getWpm();
         statusBar.forceShow();
