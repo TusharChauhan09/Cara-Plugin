@@ -12,8 +12,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Cara Analytics",
-  description: "Developer typing analytics and speed tracking dashboard",
+  title: "Cara — Developer Typing Analytics for VS Code",
+  description:
+    "Track your real-time WPM, run in-editor typing tests, and see your language breakdown — all inside VS Code. Free and open source.",
 };
 
 export default function RootLayout({

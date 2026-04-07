@@ -209,73 +209,152 @@ export class TypingTestManager implements vscode.Disposable {
             ? "Solid pace"
             : "Keep practicing!";
 
+    const accBarWidth = Math.max(stats.accuracy, 2);
+    const accBarColor =
+      stats.accuracy >= 95 ? "#10b981" : stats.accuracy >= 80 ? "#f59e0b" : "#ef4444";
+
     panel.webview.html = /* html */ `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Typing Test Results</title>
+<title>Cara — Typing Test Results</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:var(--vscode-editor-background,#0d1117);--sf:var(--vscode-editorWidget-background,#161b22);--bd:var(--vscode-widget-border,#21262d);--tx:var(--vscode-foreground,#e6edf3);--t2:var(--vscode-descriptionForeground,#7d8590)}
-body{font-family:var(--vscode-font-family,-apple-system,'Segoe UI',sans-serif);color:var(--tx);background:var(--bg);padding:36px 40px;line-height:1.5;max-width:520px;margin:0 auto}
+:root{
+  --bg:var(--vscode-editor-background,#0d1117);
+  --sf:var(--vscode-editorWidget-background,#161b22);
+  --bd:var(--vscode-widget-border,#30363d);
+  --tx:var(--vscode-foreground,#e6edf3);
+  --t2:var(--vscode-descriptionForeground,#7d8590);
+  --t3:#484f58;
+}
+body{
+  font-family:var(--vscode-font-family,-apple-system,'Segoe UI',sans-serif);
+  color:var(--tx);background:var(--bg);
+  padding:0;line-height:1.5;max-width:500px;
+}
 
-h1{font-size:22px;font-weight:700;margin-bottom:6px}
-h1 b{color:#3b82f6}
-.sub{font-size:13px;color:var(--t2);margin-bottom:28px}
+/* Header */
+.header{
+  padding:24px 32px 20px;
+  border-bottom:1px solid var(--bd);
+  position:relative;overflow:hidden;
+}
+.header::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,${gradeColor},${gradeColor}88);
+}
+.header-row{display:flex;align-items:center;justify-content:space-between}
+h1{font-size:18px;font-weight:700}
+h1 .brand{color:#3b82f6;font-weight:800}
+.sub{font-size:12px;color:var(--t2);margin-top:3px}
 
-.grade-box{text-align:center;margin-bottom:28px}
-.grade{display:inline-flex;align-items:center;justify-content:center;width:80px;height:80px;border-radius:50%;font-size:36px;font-weight:900;color:#fff;background:${gradeColor};box-shadow:0 0 24px ${gradeColor}44}
-.grade-label{margin-top:8px;font-size:14px;color:var(--t2)}
+/* Grade badge */
+.grade-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.grade{
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;font-weight:900;color:#fff;
+  background:${gradeColor};
+  box-shadow:0 0 20px ${gradeColor}55;
+}
+.grade-tag{font-size:10px;font-weight:700;color:${gradeColor};text-transform:uppercase;letter-spacing:.5px}
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-.stat{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:16px 18px}
-.stat-l{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--t2);margin-bottom:3px;font-weight:600}
-.stat-v{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
-.stat-v .u{font-size:12px;font-weight:500;color:var(--t2);margin-left:2px}
+/* Stats grid */
+.section{padding:20px 32px}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stat{
+  background:var(--sf);border:1px solid var(--bd);
+  border-radius:8px;padding:13px 15px;
+  position:relative;overflow:hidden;
+}
+.stat::after{
+  content:"";position:absolute;
+  bottom:0;left:0;right:0;height:2px;
+  background:var(--stat-accent,transparent);
+}
+.stat.blue{--stat-accent:#3b82f6}
+.stat.green{--stat-accent:#10b981}
+.stat.amber{--stat-accent:#f59e0b}
+.stat.red{--stat-accent:#ef4444}
+.stat-l{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--t2);margin-bottom:4px;font-weight:700}
+.stat-v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat-v .u{font-size:11px;font-weight:500;color:var(--t2);margin-left:2px}
 .stat.blue .stat-v{color:#3b82f6}
 .stat.green .stat-v{color:#10b981}
+.stat.amber .stat-v{color:#f59e0b}
 .stat.red .stat-v{color:#ef4444}
-.stat.purple .stat-v{color:#8b5cf6}
 
-.tip{text-align:center;font-size:13px;color:var(--t2);margin-top:20px;padding-top:16px;border-top:1px solid var(--bd)}
+/* Accuracy bar */
+.acc-row{margin-bottom:16px}
+.acc-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.acc-label span{font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.7px}
+.acc-label strong{font-size:13px;font-weight:800;color:${accBarColor}}
+.acc-track{height:8px;background:var(--bd);border-radius:4px;overflow:hidden}
+.acc-fill{height:100%;width:${accBarWidth}%;background:${accBarColor};border-radius:4px}
+
+/* Footer */
+.footer{
+  padding:14px 32px;border-top:1px solid var(--bd);
+  font-size:11px;color:var(--t3);text-align:center;
+}
+.footer b{color:var(--t2)}
 </style>
 </head><body>
 
-<h1><b>Cara</b> Typing Test</h1>
-<p class="sub">Test complete! Here are your results.</p>
-
-<div class="grade-box">
-  <div class="grade">${grade}</div>
-  <div class="grade-label">${speedLabel}</div>
-</div>
-
-<div class="grid">
-  <div class="stat blue">
-    <div class="stat-l">Speed</div>
-    <div class="stat-v">${stats.wpm}<span class="u">wpm</span></div>
-  </div>
-  <div class="stat green">
-    <div class="stat-l">Accuracy</div>
-    <div class="stat-v">${stats.accuracy}<span class="u">%</span></div>
-  </div>
-  <div class="stat purple">
-    <div class="stat-l">Duration</div>
-    <div class="stat-v">${stats.duration}</div>
-  </div>
-  <div class="stat red">
-    <div class="stat-l">Errors</div>
-    <div class="stat-v">${stats.errors}</div>
-  </div>
-  <div class="stat">
-    <div class="stat-l">Characters</div>
-    <div class="stat-v">${stats.correctChars}<span class="u">/ ${stats.totalChars}</span></div>
-  </div>
-  <div class="stat">
-    <div class="stat-l">Backspaces</div>
-    <div class="stat-v">${stats.backspaces}</div>
+<div class="header">
+  <div class="header::before"></div>
+  <div class="header-row">
+    <div>
+      <h1><span class="brand">Cara</span> Typing Test</h1>
+      <p class="sub">${speedLabel} · Test complete</p>
+    </div>
+    <div class="grade-wrap">
+      <div class="grade">${grade}</div>
+      <div class="grade-tag">Grade</div>
+    </div>
   </div>
 </div>
 
-<div class="tip">Run <b>Cara: Start Typing Test</b> from the command palette to try again.</div>
+<div class="section">
+  <div class="section-label">Results</div>
+
+  <div class="acc-row">
+    <div class="acc-label">
+      <span>Accuracy</span>
+      <strong>${stats.accuracy}%</strong>
+    </div>
+    <div class="acc-track"><div class="acc-fill"></div></div>
+  </div>
+
+  <div class="grid">
+    <div class="stat blue">
+      <div class="stat-l">Speed</div>
+      <div class="stat-v">${stats.wpm}<span class="u">wpm</span></div>
+    </div>
+    <div class="stat amber">
+      <div class="stat-l">Duration</div>
+      <div class="stat-v">${stats.duration}</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-l">Correct</div>
+      <div class="stat-v">${stats.correctChars}<span class="u">/ ${stats.totalChars}</span></div>
+    </div>
+    <div class="stat red">
+      <div class="stat-l">Errors</div>
+      <div class="stat-v">${stats.errors}</div>
+    </div>
+  </div>
+
+  <div class="stat" style="margin-bottom:0">
+    <div class="stat-l">Backspaces used</div>
+    <div class="stat-v" style="font-size:18px">${stats.backspaces}</div>
+  </div>
+</div>
+
+<div class="footer">
+  Open the Command Palette and run <b>Cara: Start Typing Test</b> to try again.
+</div>
 
 </body></html>`;
   }
@@ -348,22 +427,22 @@ h1 b{color:#3b82f6}
 /* ── Helpers ── */
 
 function buildHeader(promptLines: string[]): string {
-  const divider = "// " + "━".repeat(60);
+  const bar = "// " + "─".repeat(58);
   const lines = [
-    divider,
-    "//  🎯  CARA TYPING TEST",
-    divider,
-    "//  Type the code shown below as fast and accurately as you can.",
-    "//  The timer starts when you type your first character.",
-    "//  Results appear automatically when you finish.",
-    divider,
+    bar,
     "//",
-    ...promptLines.map((l) => "//  " + l),
+    "//   Cara Typing Test",
+    "//   Type the snippet below as fast and accurately as you can.",
+    "//   Timer starts on your first keystroke — results appear when done.",
     "//",
-    divider,
-    "//  👇 START TYPING HERE (below this line)",
-    divider,
-    "", // newline so cursor lands on a blank line
+    bar,
+    "//",
+    ...promptLines.map((l) => "//   " + l),
+    "//",
+    bar,
+    "//   Type below ↓",
+    bar,
+    "",
   ];
   return lines.join("\n");
 }
